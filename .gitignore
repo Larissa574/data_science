@@ -9,21 +9,39 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# Data Zindi: keep competition data private
+# Raw data: never commit datasets
 /data/*.csv
 /data/*.xlsx
+/data/*.xls
 /data/*.zip
 /data/*.json
+/data/*.parquet
+/data/*.pq
+/data/**/*.csv
+/data/**/*.xlsx
+/data/**/*.xls
+/data/**/*.zip
+/data/**/*.json
+/data/**/*.parquet
+/data/**/*.pq
 
-# Trained models and generated artifacts
+# Model artifacts and archives
 /models/*.joblib
 /models/*.pkl
 /models/*.pickle
 /models/*.json
+/models/**/*.joblib
+/models/**/*.pkl
+/models/**/*.pickle
 
-# Local outputs
+# Local monitoring outputs
+/logs/*
+!/logs/.gitkeep
+*.log
 outputs/
 reports/generated/
-*.log
+
+# OS / editor
 .DS_Store
 Thumbs.db
+.vscode/
