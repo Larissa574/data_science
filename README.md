@@ -1,54 +1,54 @@
-# FinAccess AI
+# FoodPrice AI
 
 ## Projet intégrateur - Science des Données
 
-**FinAccess AI** est un projet de Machine Learning consacré à la prédiction de l'accès aux services bancaires à partir de caractéristiques socio-économiques et démographiques.
+**FoodPrice AI** est un projet de science des données consacré à l'analyse et à l'estimation des prix des produits alimentaires sur les marchés du Bénin.
 
-### Objectif
+L'objectif est de construire une chaîne complète : compréhension du problème, exploration des données, préparation, modélisation de régression, évaluation, application web et automatisation du réentraînement.
 
-Construire une chaîne complète de Science des Données :
+## Données
 
-1. compréhension du problème métier ;
-2. exploration et nettoyage des données ;
-3. préparation des variables ;
-4. entraînement et comparaison de modèles ;
-5. déploiement sous forme d'application web ;
-6. automatisation du réentraînement.
+Le projet utilise le jeu de données **Benin - Food Prices | Africa (original)**. Les fichiers Parquet sont conservés localement et ne doivent pas être publiés dans ce dépôt.
 
-> La prédiction concerne l'appartenance à une classe de possession de compte bancaire. Elle ne constitue pas une décision d'éligibilité bancaire ou de crédit.
+Les champs du jeu de données comprennent notamment la date, le département, la commune, le marché, le produit, l'unité et le prix. La variable cible du projet est `price`.
 
-## Structure
+**Précautions méthodologiques :**
+- Un prix doit toujours être interprété avec son produit et son unité.
+- Les prix de produits ou d'unités différents ne doivent pas être comparés sans précaution.
+- `usdprice` ne doit pas être utilisé comme variable explicative si la cible est `price`, car il est dérivé du prix et créerait une fuite de cible.
+- Les valeurs extrêmes doivent être examinées, pas supprimées automatiquement.
+- L'évaluation doit privilégier une séparation temporelle : les observations anciennes pour l'entraînement et les plus récentes pour le test/validation.
+
+Place les fichiers Parquet dans `data/raw/`. Si le dataset est réparti sur plusieurs fichiers, le script MLOps les lit et les concatène. Pour réentraîner avec un nouvel arrivage, fournis les fichiers historiques et le nouveau lot ensemble afin de conserver l'historique.
+
+## Structure du dépôt
 
 ```text
-FinAccess-AI/
-├── data/                  # Dataset local, non versionné
-├── notebooks/             # Analyse exploratoire
+data_science/
+├── data/
+│   └── raw/                  # Parquet locaux, non versionnés
+├── notebooks/
+│   └── EDA.ipynb
 ├── src/
-│   ├── preprocessing.py   # Nettoyage et prétraitement
-│   ├── train.py           # Entraînement et comparaison des modèles
-│   ├── predict.py         # Prédiction
-│   └── retrain.py         # Réentraînement automatisé
+│   ├── preprocessing.py
+│   ├── train.py              # Pipeline ML de la personne 2
+│   ├── predict.py
+│   └── retrain.py            # Orchestration MLOps
 ├── app/
-│   └── app.py             # Application Streamlit
-├── models/                # Modèle entraîné, non versionné
+│   └── app.py
+├── models/                   # Modèles locaux, non versionnés
+├── logs/                     # Historique local des réentraînements
+├── scripts/
+│   └── retrain_windows.bat
+├── tests/
+│   └── test_retrain.py
 ├── requirements.txt
-├── .gitignore
 └── README.md
 ```
 
-## Dataset
-
-Le projet utilise le dataset **Financial Inclusion in Africa** de Zindi.
-
-Le dataset doit être téléchargé depuis la compétition officielle puis placé localement dans :
-
-```text
-data/financial_inclusion.csv
-```
-
-Les données de compétition ne sont pas poussées sur GitHub.
-
 ## Installation
+
+Python 3.10 ou supérieur est recommandé.
 
 ```bash
 git clone https://github.com/Larissa574/data_science.git
@@ -56,70 +56,112 @@ cd data_science
 python -m venv .venv
 ```
 
-### Windows
+Sous Windows :
 
-```bash
+```powershell
 .venv\Scripts\activate
 ```
 
-### Linux / macOS
+Sous Linux/macOS :
 
 ```bash
 source .venv/bin/activate
 ```
 
-Puis :
+Installer les dépendances :
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Entraînement
+## Partie MLOps : réentraînement contrôlé
 
-Après avoir placé le dataset dans `data/financial_inclusion.csv` :
+Le script `src/retrain.py` ne remplace pas aveuglément le modèle actif.
+
+Il réalise les étapes suivantes :
+
+1. recherche et lecture des fichiers Parquet ;
+2. vérification des colonnes obligatoires (`date`, `commodity`, `unit`, `price`) ;
+3. conversion des dates et des prix, retrait des lignes dont les champs essentiels sont invalides et suppression des doublons exacts ;
+4. appel au pipeline d'entraînement de la personne 2 ;
+5. évaluation du candidat et du modèle actif sur **le même jeu de validation** ;
+6. acceptation du candidat seulement si MAE et RMSE ne se dégradent pas et qu'au moins l'une des deux s'améliore ;
+7. archivage local de l'ancien modèle avant promotion du candidat ;
+8. ajout du résultat à `logs/retraining_history.csv`.
+
+Les lignes avec prix non positif ou date/produit/unité invalide sont écartées du processus d'entraînement. Les valeurs extrêmes positives ne sont pas supprimées automatiquement.
+
+### Contrat d'intégration avec la personne 2
+
+Pour que le réentraînement fonctionne, le fichier `src/train.py` doit exposer cette fonction :
+
+```python
+def train_candidate(data: pd.DataFrame) -> dict:
+    # Effectuer le split temporel et entraîner le modèle candidat.
+    # X_valid et y_valid doivent représenter le même jeu de validation
+    # pour le candidat et pour le modèle déjà en production.
+    return {
+        "model": fitted_pipeline,
+        "X_valid": X_valid,
+        "y_valid": y_valid,
+    }
+```
+
+Le modèle retourné doit être un pipeline sklearn sérialisable avec Joblib et fournir `predict(X)`. Le prétraitement doit être inclus dans le pipeline afin que le modèle puisse traiter les mêmes variables lors de l'évaluation et de la prédiction.
+
+**Important :** le script MLOps est prêt côté orchestration, mais il dépend de ce contrat. Le code d'entraînement initial du dépôt doit encore être remplacé/intégré par le pipeline de régression FoodPrice AI de la personne 2. Le script refusera de continuer si la fonction attendue n'existe pas.
+
+### Lancer un réentraînement
+
+Avec tous les fichiers Parquet dans `data/raw/` :
 
 ```bash
-python src/train.py
+python src/retrain.py --data data/raw
 ```
 
-Le meilleur modèle selon le F1-score est sauvegardé dans :
-
-```text
-models/model.joblib
-```
-
-## Application
+Ou en indiquant explicitement plusieurs fichiers (historique + nouveau lot) :
 
 ```bash
-streamlit run app/app.py
+python src/retrain.py --data data/historique.parquet data/nouveau_lot.parquet
 ```
 
-L'application permet une prédiction individuelle et une prédiction par fichier CSV.
+Le modèle actif est enregistré localement dans `models/model.joblib`. Les anciennes versions acceptées sont archivées dans `models/archive/`. L'historique est conservé dans `logs/retraining_history.csv`.
 
-## Réentraînement automatique
+Ces fichiers générés sont exclus de GitHub.
 
-Le script :
+### Automatisation sous Windows
+
+Lancer manuellement :
+
+```powershell
+scripts\retrain_windows.bat
+```
+
+Pour planifier l'exécution avec le Planificateur de tâches Windows :
+
+1. créer une tâche et choisir la fréquence souhaitée ;
+2. dans **Action**, sélectionner le programme `cmd.exe` ;
+3. ajouter comme arguments : `/c "C:\chemin\vers\data_science\scripts\retrain_windows.bat"` ;
+4. définir le dossier du projet comme répertoire de démarrage si nécessaire ;
+5. vérifier que les fichiers Parquet actualisés sont présents avant l'heure d'exécution.
+
+Un ordonnanceur ne crée pas de nouvelles données : il lance le script. Il faut donc qu'un nouveau lot soit disponible dans le dossier de données.
+
+## Tests
 
 ```bash
-python src/retrain.py
+pytest -q
 ```
 
-réutilise le pipeline d'entraînement. Il peut ensuite être programmé avec Windows Task Scheduler, cron ou un autre ordonnanceur.
+Les tests vérifient notamment le contrôle des données et la règle de comparaison entre le modèle candidat et le modèle actif.
 
-## Modèles
+## Application et entraînement
 
-Le pipeline compare actuellement :
-
-- Régression Logistique : modèle de référence interprétable ;
-- Random Forest : modèle non linéaire capable de capturer des interactions entre variables.
-
-La sélection finale est basée principalement sur le F1-score, avec précision, rappel et ROC-AUC comme métriques complémentaires lorsque disponibles.
+Les modules `train.py`, `predict.py` et `app/app.py` doivent être alignés sur la régression FoodPrice AI lors de l'intégration des travaux des personnes 2 et 3. Ne pas utiliser les anciens éléments FinAccess AI pour entraîner ou présenter le projet FoodPrice AI.
 
 ## Équipe
 
-Projet réalisé dans le cadre du TP intégrateur de Science des Données.
-
-- Personne 1 : Business / EDA
-- Personne 2 : Machine Learning
-- Personne 3 : Application
-- Personne 4 : Intégration / MLOps / automatisation
+- Personne 1 : analyse métier et exploration des données (EDA)
+- Personne 2 : préparation des variables, entraînement et évaluation ML
+- Personne 3 : application et intégration des prédictions
+- Personne 4 : automatisation, validation des données, suivi des modèles et intégration MLOps
