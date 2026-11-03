@@ -11,10 +11,14 @@ env/
 
 # Raw data: never commit datasets
 /data/*.csv
+/data/*.parquet
 /data/*.xlsx
 /data/*.xls
 /data/*.zip
 /data/*.json
+
+artifacts/
+make_dummy_model.py
 /data/*.parquet
 /data/*.pq
 /data/**/*.csv
