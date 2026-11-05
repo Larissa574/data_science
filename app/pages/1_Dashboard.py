@@ -72,7 +72,7 @@ with tab_time:
         markers=True,
         labels={"period": "Month", "price": "Average price (XOF)", "admin1": "Department"},
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 with tab_market:
     top_n = st.slider("Number of markets", 5, 30, 15)
@@ -89,7 +89,7 @@ with tab_market:
         orientation="h",
         labels={"price": "Average price (XOF)", "market": "Market"},
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 with tab_dept:
     fig = px.box(
@@ -98,10 +98,11 @@ with tab_dept:
         y="price",
         labels={"admin1": "Department", "price": "Price (XOF)"},
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 with st.expander("Show raw data"):
     st.dataframe(
         product_df.drop(columns=["period"]).sort_values("date", ascending=False),
-        use_container_width=True,
+        #use_container_width=True,
+        width="stretch",
     )
