@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import joblib
@@ -6,6 +7,11 @@ import pandas as pd
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[2]
+# The pickled pipeline references classes from the `src` package
+# (e.g. src.preprocessing.DateFeatures): the repo root must be importable.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 MODEL_PATH = ROOT / "models" / "model_current.joblib"
 
 FEATURES = [
