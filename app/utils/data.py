@@ -4,8 +4,7 @@ import pandas as pd
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[2]
-DATA_DIR = ROOT / "data"
-DATA_FILES = ["train.parquet", "test.parquet"]
+DATA_DIR = ROOT / "data" / "raw"
 
 # Columns kept for the dashboard and the app
 KEEP_COLUMNS = [
