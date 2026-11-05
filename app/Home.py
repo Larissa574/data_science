@@ -16,4 +16,4 @@ c2.metric("Products", len(opts["commodities"]))
 c3.metric("Markets", len(opts["markets"]))
 c4.metric("Period", f"{opts['min_date'].year} to {opts['max_date'].year}")
 
-st.dataframe(df.head(20), use_container_width=True)
+st.dataframe(df.head(20), width="stretch")
