@@ -16,12 +16,9 @@ KEEP_COLUMNS = [
 
 @st.cache_data(show_spinner="Loading data...")
 def load_data() -> pd.DataFrame:
-    """Load all parquet files, merge them and add time features."""
-    frames = []
-    for name in DATA_FILES:
-        path = DATA_DIR / name
-        if path.exists():
-            frames.append(pd.read_parquet(path))
+    """Load all parquet files of data/raw/, merge them and add time feature."""
+    paths = sorted(DATA_DIR.glob("*.parquet")) + sorted(DATA_DIR.glob("*.pq"))
+    frames = [pd.read_parquet(path) for path in paths]
 
     if not frames:
         st.error(f"No parquet file found in {DATA_DIR}")
