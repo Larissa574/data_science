@@ -1,0 +1,636 @@
+{
+ "markets": {
+  "Abomey": {
+   "admin1": "Zou",
+   "admin2": "Abomey",
+   "latitude": 7.18,
+   "longitude": 1.99
+  },
+  "Affamè": {
+   "admin1": "Oueme",
+   "admin2": "Bonou",
+   "latitude": 6.91,
+   "longitude": 2.47
+  },
+  "Ahidahomè (Porto-Novo)": {
+   "admin1": "Oueme",
+   "admin2": "Porto-novo",
+   "latitude": 6.5,
+   "longitude": 2.62
+  },
+  "Azovè": {
+   "admin1": "Couffo",
+   "admin2": "Aplahoue",
+   "latitude": 6.95,
+   "longitude": 1.7
+  },
+  "Azowlissè": {
+   "admin1": "Oueme",
+   "admin2": "Adjohoun",
+   "latitude": 6.67,
+   "longitude": 2.49
+  },
+  "Banikoara": {
+   "admin1": "Alibori",
+   "admin2": "Banikoara",
+   "latitude": 11.29,
+   "longitude": 2.44
+  },
+  "Bassila": {
+   "admin1": "Donga",
+   "admin2": "Bassila",
+   "latitude": 9.01,
+   "longitude": 1.67
+  },
+  "Bembèrèkè": {
+   "admin1": "Borgou",
+   "admin2": "Bembereke",
+   "latitude": 10.22,
+   "longitude": 2.67
+  },
+  "Bohicon": {
+   "admin1": "Zou",
+   "admin2": "Bohicon",
+   "latitude": 7.18,
+   "longitude": 2.07
+  },
+  "Cobly": {
+   "admin1": "Atakora",
+   "admin2": "Kobli",
+   "latitude": 10.48,
+   "longitude": 0.88
+  },
+  "Comé": {
+   "admin1": "Mono",
+   "admin2": "Come",
+   "latitude": 6.4,
+   "longitude": 1.88
+  },
+  "Covè": {
+   "admin1": "Zou",
+   "admin2": "Cove",
+   "latitude": 7.22,
+   "longitude": 2.34
+  },
+  "Dangbo": {
+   "admin1": "Oueme",
+   "admin2": "Dangbo",
+   "latitude": 6.59,
+   "longitude": 2.55
+  },
+  "Dantokpa": {
+   "admin1": "Littoral",
+   "admin2": "Cotonou",
+   "latitude": 6.37,
+   "longitude": 2.43
+  },
+  "Dassa-Zoumè": {
+   "admin1": "Collines",
+   "admin2": "Dassa",
+   "latitude": 7.78,
+   "longitude": 2.2
+  },
+  "Dasso": {
+   "admin1": "Zou",
+   "admin2": "Ouinhi",
+   "latitude": 7.01,
+   "longitude": 2.46
+  },
+  "Djougou": {
+   "admin1": "Donga",
+   "admin2": "Djougou",
+   "latitude": 9.71,
+   "longitude": 1.67
+  },
+  "Dogbo": {
+   "admin1": "Couffo",
+   "admin2": "Dogbo-tota",
+   "latitude": 6.8,
+   "longitude": 1.79
+  },
+  "Glazoué": {
+   "admin1": "Collines",
+   "admin2": "Glazoue",
+   "latitude": 7.97,
+   "longitude": 2.24
+  },
+  "Hozin": {
+   "admin1": "Oueme",
+   "admin2": "Dangbo",
+   "latitude": 6.6,
+   "longitude": 2.55
+  },
+  "Ikpenlè": {
+   "admin1": "Plateau",
+   "admin2": "Adja-ouere",
+   "latitude": 6.89,
+   "longitude": 2.62
+  },
+  "Kalalé": {
+   "admin1": "Borgou",
+   "admin2": "Kalale",
+   "latitude": 10.29,
+   "longitude": 3.38
+  },
+  "Karimama": {
+   "admin1": "Alibori",
+   "admin2": "Karimama",
+   "latitude": 12.07,
+   "longitude": 3.18
+  },
+  "Kassoua-Allah": {
+   "admin1": "Donga",
+   "admin2": "Ouake",
+   "latitude": 9.67,
+   "longitude": 1.37
+  },
+  "Klouékanmè": {
+   "admin1": "Couffo",
+   "admin2": "Klouekanme",
+   "latitude": 7.07,
+   "longitude": 1.88
+  },
+  "Kpedekpo": {
+   "admin1": "Zou",
+   "admin2": "Zangnanado",
+   "latitude": 7.23,
+   "longitude": 2.5
+  },
+  "Kérou": {
+   "admin1": "Atakora",
+   "admin2": "Kerou",
+   "latitude": 10.83,
+   "longitude": 2.11
+  },
+  "Kétou": {
+   "admin1": "Plateau",
+   "admin2": "Ketou",
+   "latitude": 7.36,
+   "longitude": 2.6
+  },
+  "Malanville (CBM)": {
+   "admin1": "Alibori",
+   "admin2": "Malanville",
+   "latitude": 11.86,
+   "longitude": 3.38
+  },
+  "N'Dali": {
+   "admin1": "Borgou",
+   "admin2": "Ndali",
+   "latitude": 9.86,
+   "longitude": 2.71
+  },
+  "Natitingou": {
+   "admin1": "Atakora",
+   "admin2": "Natitingou",
+   "latitude": 10.3,
+   "longitude": 1.38
+  },
+  "Nikki": {
+   "admin1": "Borgou",
+   "admin2": "Nikki",
+   "latitude": 9.94,
+   "longitude": 3.21
+  },
+  "Ouando": {
+   "admin1": "Oueme",
+   "admin2": "Porto-novo",
+   "latitude": 6.5,
+   "longitude": 2.59
+  },
+  "Ouesse": {
+   "admin1": "Collines",
+   "admin2": "Ouesse",
+   "latitude": 8.49,
+   "longitude": 2.42
+  },
+  "Ouègbo": {
+   "admin1": "Atlantique",
+   "admin2": "Toffo",
+   "latitude": 6.8,
+   "longitude": 2.17
+  },
+  "Parakou": {
+   "admin1": "Borgou",
+   "admin2": "Parakou",
+   "latitude": 9.35,
+   "longitude": 2.61
+  },
+  "Pobè": {
+   "admin1": "Plateau",
+   "admin2": "Pobe",
+   "latitude": 6.98,
+   "longitude": 2.66
+  },
+  "Péhunco": {
+   "admin1": "Atakora",
+   "admin2": "Pehonko",
+   "latitude": 10.23,
+   "longitude": 2.0
+  },
+  "Savalou": {
+   "admin1": "Collines",
+   "admin2": "Savalou",
+   "latitude": 7.93,
+   "longitude": 1.97
+  },
+  "Sehoue": {
+   "admin1": "Atlantique",
+   "admin2": "Toffo",
+   "latitude": 6.84,
+   "longitude": 2.11
+  },
+  "Sinendé": {
+   "admin1": "Borgou",
+   "admin2": "Sinende",
+   "latitude": 10.34,
+   "longitude": 2.38
+  },
+  "So-Ava": {
+   "admin1": "Atlantique",
+   "admin2": "So-ava",
+   "latitude": 6.47,
+   "longitude": 2.39
+  },
+  "Sèdjè-Dénou": {
+   "admin1": "Atlantique",
+   "admin2": "Ze",
+   "latitude": 6.72,
+   "longitude": 2.38
+  },
+  "Sékou": {
+   "admin1": "Atlantique",
+   "admin2": "Allada",
+   "latitude": 6.63,
+   "longitude": 2.22
+  },
+  "Tanguiéta": {
+   "admin1": "Atakora",
+   "admin2": "Tanguieta",
+   "latitude": 10.62,
+   "longitude": 1.27
+  },
+  "Tatonnoukon": {
+   "admin1": "Plateau",
+   "admin2": "Adja-ouere",
+   "latitude": 6.97,
+   "longitude": 2.57
+  },
+  "Tchaourou": {
+   "admin1": "Borgou",
+   "admin2": "Tchaourou",
+   "latitude": 8.89,
+   "longitude": 2.6
+  },
+  "Yoko": {
+   "admin1": "Plateau",
+   "admin2": "Sakete",
+   "latitude": 6.71,
+   "longitude": 2.61
+  },
+  "Zinvié": {
+   "admin1": "Atlantique",
+   "admin2": "Abomey-calavi",
+   "latitude": 6.61,
+   "longitude": 2.36
+  },
+  "Zogbodomey": {
+   "admin1": "Zou",
+   "admin2": "Zogbodome",
+   "latitude": 7.06,
+   "longitude": 2.25
+  },
+  "Zè": {
+   "admin1": "Atlantique",
+   "admin2": "Ze",
+   "latitude": 6.68,
+   "longitude": 2.32
+  }
+ },
+ "commodities": {
+  "Beans (black)": {
+   "category": "pulses and nuts",
+   "units": [
+    "KG"
+   ]
+  },
+  "Beans (red)": {
+   "category": "pulses and nuts",
+   "units": [
+    "KG"
+   ]
+  },
+  "Beans (white)": {
+   "category": "pulses and nuts",
+   "units": [
+    "KG"
+   ]
+  },
+  "Cabbage": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Carrots": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Cassava (cossette)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Cassava (fresh)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Cassava flour": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Cassava meal (gari)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Cassava meal (gari, fine)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Cassava meal (tapioca)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Coconut (dried)": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Fish (fresh, silvi)": {
+   "category": "meat, fish and eggs",
+   "units": [
+    "KG"
+   ]
+  },
+  "Fish (tilapia)": {
+   "category": "meat, fish and eggs",
+   "units": [
+    "KG"
+   ]
+  },
+  "Groundnuts (Bambara)": {
+   "category": "pulses and nuts",
+   "units": [
+    "KG"
+   ]
+  },
+  "Groundnuts (small, unshelled)": {
+   "category": "pulses and nuts",
+   "units": [
+    "KG"
+   ]
+  },
+  "Leafy vegetables": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Lemons": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Maize": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Maize (white)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Maize (yellow)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Millet": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Oil (groundnut)": {
+   "category": "oil and fats",
+   "units": [
+    "L"
+   ]
+  },
+  "Oil (palm nut)": {
+   "category": "oil and fats",
+   "units": [
+    "KG"
+   ]
+  },
+  "Oil (palm)": {
+   "category": "oil and fats",
+   "units": [
+    "L"
+   ]
+  },
+  "Okra (fresh)": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Onions": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Oranges": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Papaya": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Peas (green, dry)": {
+   "category": "pulses and nuts",
+   "units": [
+    "KG"
+   ]
+  },
+  "Peppers (red, dry)": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Plantains": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Potatoes": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Rice (Broken, local)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Rice (imported)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Rice (local)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Rice (milled, local)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Rice (paddy)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Shrimps": {
+   "category": "meat, fish and eggs",
+   "units": [
+    "KG"
+   ]
+  },
+  "Snail": {
+   "category": "miscellaneous food",
+   "units": [
+    "KG"
+   ]
+  },
+  "Sorghum": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Sorghum (red)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Soybeans": {
+   "category": "pulses and nuts",
+   "units": [
+    "KG"
+   ]
+  },
+  "Sweet potatoes": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Taro": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Tomatoes": {
+   "category": "vegetables and fruits",
+   "units": [
+    "KG"
+   ]
+  },
+  "Wheat": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Wheat flour (imported)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Yam": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Yam (dry)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Yam (flour)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Yam (white)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  },
+  "Yam (yellow)": {
+   "category": "cereals and tubers",
+   "units": [
+    "KG"
+   ]
+  }
+ },
+ "pricetypes": [
+  "Retail",
+  "Wholesale"
+ ],
+ "date_min": "2002-01-15",
+ "date_max": "2026-02-15"
+}

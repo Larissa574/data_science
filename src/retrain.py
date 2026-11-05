@@ -36,7 +36,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 DEFAULT_DATA_DIR = ROOT / "data" / "raw"
-DEFAULT_MODEL_PATH = ROOT / "models" / "model.joblib"
+DEFAULT_MODEL_PATH = ROOT / "models" / "model_current.joblib"
 DEFAULT_LOG_PATH = ROOT / "logs" / "retraining_history.csv"
 
 # These fields are necessary to identify a dated food-price observation.

@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "trained_at": "2026-11-05T08:12:05",
+  "model_name": "lightgbm",
+  "model_label": "LightGBM (gradient boosting)",
+  "params": {
+    "subsample_freq": 1,
+    "subsample": 0.8,
+    "num_leaves": 127,
+    "n_estimators": 1500,
+    "min_child_samples": 5,
+    "learning_rate": 0.1,
+    "colsample_bytree": 0.8
+  },
+  "target": "price",
+  "input_columns": [
+    "date",
+    "admin1",
+    "admin2",
+    "market",
+    "category",
+    "commodity",
+    "unit",
+    "pricetype",
+    "latitude",
+    "longitude"
+  ],
+  "n_train_rows": 73223,
+  "metrics_validation": {
+    "MAE": 76.10744061487922,
+    "RMSE": 200.3094830713328,
+    "R2": 0.9611153789956659
+  },
+  "metrics_test": {
+    "MAE": 78.4948494377737,
+    "RMSE": 217.87793274153034,
+    "R2": 0.9599625525935899
+  },
+  "libraries": {
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "pandas": "3.0.6",
+    "joblib": "1.6.0"
+  }
+}

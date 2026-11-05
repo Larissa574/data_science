@@ -1,10 +1,14 @@
-pandas>=2.0,<3.0
-numpy>=1.24,<3.0
-scikit-learn>=1.3,<2.0
-joblib>=1.3,<2.0
-pyarrow>=14.0,<25.0
-matplotlib>=3.7,<4.0
+# Versions identiques pour tout le groupe (un .joblib sauvegardé avec une version
+# de scikit-learn / lightgbm peut ne pas se charger avec une autre).
+pandas==3.0.6
+numpy==2.5.4
+scikit-learn==1.9.1
+lightgbm==4.7.0
+joblib==1.6.0
+pyarrow==26.0.1
+matplotlib==3.11.2
 seaborn>=0.12,<1.0
 jupyter>=1.0,<2.0
 streamlit>=1.30,<2.0
+plotly>=5.0,<7.0
 pytest>=7.4,<9.0
