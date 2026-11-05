@@ -5,7 +5,7 @@ import plotly.express as px
 import streamlit as st
 
 from utils.data import get_options, load_data
-from utils.model import load_model, predict
+from utils.model import FEATURES, load_metadata, load_model, predict
 
 st.title("Price estimation")
 
@@ -16,6 +16,22 @@ model = load_model()
 if model is None:
     st.error("Model not found. Place the trained model in models/model_current.joblib.")
     st.stop()
+    
+meta = load_metadata()
+if meta:
+    if set(meta.get("input_columns", FEATURES)) != set(FEATURES):
+        st.warning("This model expects different input columns than the app sends.")
+    with st.expander("About the model"):
+        st.caption(
+            f"{meta.get('model_label', 'Model')}, version {meta.get('version', '?')}, "
+            f"trained on {str(meta.get('trained_at', ''))[:10]}"
+        )
+        m = meta.get("metrics_test") or meta.get("metrics_validation")
+        if m:
+            c1, c2, c3 = st.columns(3)
+            c1.metric("MAE", f"{m['MAE']:,.0f} XOF")
+            c2.metric("RMSE", f"{m['RMSE']:,.0f} XOF")
+            c3.metric("R²", f"{m['R2']:.3f}")
 
 # ---------- Inputs (each choice narrows the next one) ----------
 left, right = st.columns(2)
@@ -31,9 +47,8 @@ with left:
 with right:
     market = st.selectbox("Market", sorted(sub["market"].unique()))
     target_date = st.date_input(
-        "Date", value=date.today(), min_value=opts["min_date"]
+        "Date", value=opts["max_date"], min_value=opts["min_date"]
     )
-
 history = sub[sub["market"] == market].sort_values("date")
 info = history.iloc[-1]  # location and category come from the data
 
@@ -65,7 +80,7 @@ if st.button("Estimate price", type="primary"):
     m2.metric(
         "Last observed price",
         f"{last['price']:,.0f} XOF",
-        delta=f"estimate minus last: {estimate - last['price']:+,.0f} XOF",
+        delta=f"{estimate - last['price']:+,.0f} XOF vs last observed",
         delta_color="off",
     )
     m3.metric("Historical average", f"{history['price'].mean():,.0f} XOF")
