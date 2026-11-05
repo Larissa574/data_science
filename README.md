@@ -97,7 +97,7 @@ L'application s'ouvre sur `http://localhost:8501`.
 
 Prérequis :
 - les fichiers Parquet dans `data/raw/` (partagés séparément, non versionnés) ;
-- le modèle entraîné dans `models/model.joblib` (livré par le pipeline d'entraînement puis mis à jour par `retrain.py`). Sans lui, les pages Estimation et Batch CSV affichent un message d'erreur, mais le Dashboard reste utilisable.
+- le modèle entraîné dans `models/model_current.joblib` (livré par le pipeline d'entraînement puis mis à jour par `retrain.py`). Sans lui, les pages Estimation et Batch CSV affichent un message d'erreur, mais le Dashboard reste utilisable.
 
 ### Description des fichiers
 
@@ -107,11 +107,11 @@ Prérequis :
 
 #### `app/utils/model.py`
 Seul fichier de l'application qui dépend du modèle. Si le modèle change, c'est ici qu'on ajuste :
-- `MODEL_PATH` : emplacement du modèle (`models/model.joblib`) ;
-- `FEATURES` : colonnes d'entrée, dans l'ordre attendu par le modèle ;
+- `MODEL_PATH` : emplacement du modèle (`models/model_current.joblib`) ;
+- `FEATURES` : les 10 colonnes brutes d'entrée (`date` comprise) ;
 - `LOG_TARGET` : `True` si le modèle prédit `log1p(prix)` (la prédiction est alors reconvertie en FCFA).
 
-Fonctions : `load_model()`, `add_time_features()`, `predict()`.
+Fonctions : `load_model()` et `predict()`. Le chargement est mis en cache avec la date de modification du fichier : quand `retrain.py` remplace le modèle, l'application charge la nouvelle version sans redémarrer.
 
 #### `app/pages/1_Dashboard.py`
 Filtres en cascade (produit, unité, type de prix, départements, période), puis indicateurs (moyenne, médiane, nombre de marchés) et trois onglets : évolution mensuelle, prix par marché, répartition par département. Les prix ne sont comparables que pour une même unité et un même type de prix, d'où la cascade.
@@ -161,11 +161,12 @@ Le modèle retourné doit être un pipeline sklearn sérialisable avec Joblib et
 
 ### Contrat d'intégration avec la personne 3 (application)
 
-- **Emplacement** : l'application charge un seul fichier, `models/model.joblib`. Il ne doit jamais être absent, même brièvement : le nouveau modèle doit être écrit dans un fichier temporaire du même dossier, puis placé avec `os.replace`, qui est atomique.
+- **Emplacement** : l'application charge un seul fichier, `models/model_current.joblib`. Ses métadonnées (version, date d'entraînement, métriques, colonnes) sont dans `models/model_current.json` et les anciennes versions dans `models/archive/`. Il ne doit jamais être absent, même brièvement : le nouveau modèle doit être écrit dans un fichier temporaire du même dossier, puis placé avec `os.replace`, qui est atomique.
 - **Contenu** : pipeline sklearn complet (prétraitement inclus), sérialisé avec Joblib.
-- **Entrées** : un DataFrame pandas avec les colonnes brutes `admin1`, `admin2`, `market`, `latitude`, `longitude`, `category`, `commodity`, `unit`, `pricetype`, `year`, `month` (la liste exacte attendue est `FEATURES` dans `app/utils/model.py`). La cible est `price` en XOF. Les colonnes `usdprice`, `currency`, `priceflag`, `esa_source` et `esa_processed` ne sont pas des entrées.
+- **Entrées** : un DataFrame pandas avec 10 colonnes brutes : `date`, `admin1`, `admin2`, `market`, `latitude`, `longitude`, `category`, `commodity`, `unit`, `pricetype`. L'année et le mois sont extraits de `date` à l'intérieur du pipeline (liste exacte dans `FEATURES`, `app/utils/model.py`). La cible est `price` en XOF. Les colonnes `usdprice`, `currency`, `priceflag`, `esa_source` et `esa_processed` ne sont pas des entrées.
 - **Sortie** : un prix en XOF par ligne. Si le modèle prédit `log1p(price)`, mettre `LOG_TARGET = True` dans `app/utils/model.py`.
 - **Changement de variables** : si la liste des colonnes d'entrée change, la personne 3 doit être prévenue pour mettre à jour `FEATURES` et les pages Estimation et Batch CSV.
+- **Code personnalisé** : si le pipeline contient une fonction ou une classe personnalisée (par exemple dans `src/preprocessing.py`), elle doit être importable depuis l'application, sinon le modèle ne pourra pas être rechargé.
 - **Données** : l'application et `retrain.py` lisent tous deux `data/raw/`. Un nouveau lot doit conserver les mêmes colonnes que les fichiers d'origine.
 - **Versions** : un modèle Joblib dépend de la version de scikit-learn utilisée pour l'entraîner. Les versions de `scikit-learn`, `pandas`, `joblib` et `streamlit` sont figées dans `requirements.txt`.
 
@@ -183,7 +184,7 @@ Ou en indiquant explicitement plusieurs fichiers (historique + nouveau lot) :
 python src/retrain.py --data data/historique.parquet data/nouveau_lot.parquet
 ```
 
-Le modèle actif est enregistré localement dans `models/model.joblib`. Les anciennes versions acceptées sont archivées dans `models/archive/`. L'historique est conservé dans `logs/retraining_history.csv`.
+Le modèle actif est enregistré localement dans `models/model_current.joblib`, avec ses métadonnées dans `models/model_current.json`. Les anciennes versions acceptées sont archivées dans `models/archive/`. L'historique est conservé dans `logs/retraining_history.csv`.
 
 Ces fichiers générés sont exclus de GitHub.
 

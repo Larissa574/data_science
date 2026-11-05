@@ -49,3 +49,5 @@ reports/generated/
 .DS_Store
 Thumbs.db
 .vscode/
+
+test_batch.csv

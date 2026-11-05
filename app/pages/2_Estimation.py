@@ -14,7 +14,7 @@ opts = get_options(df)
 model = load_model()
 
 if model is None:
-    st.error("Model not found. Place the trained model in artifacts/model.joblib.")
+    st.error("Model not found. Place the trained model in models/model_current.joblib.")
     st.stop()
 
 # ---------- Inputs (each choice narrows the next one) ----------
@@ -55,8 +55,7 @@ if st.button("Estimate price", type="primary"):
         "commodity": commodity,
         "unit": unit,
         "pricetype": pricetype,
-        "year": target_date.year,
-        "month": target_date.month,
+        "date": pd.Timestamp(target_date),
     }])
     estimate = float(predict(model, row)[0])
 
@@ -66,7 +65,7 @@ if st.button("Estimate price", type="primary"):
     m2.metric(
         "Last observed price",
         f"{last['price']:,.0f} XOF",
-        delta=f"{estimate - last['price']:+,.0f} XOF vs estimate",
+        delta=f"estimate minus last: {estimate - last['price']:+,.0f} XOF",
         delta_color="off",
     )
     m3.metric("Historical average", f"{history['price'].mean():,.0f} XOF")

@@ -6,32 +6,27 @@ import pandas as pd
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[2]
-MODEL_PATH = ROOT / "artifacts" / "model.joblib"
+MODEL_PATH = ROOT / "models" / "model_current.joblib"
 
-# --- A ALIGNER AVEC LA PERSONNE 2 ---
 FEATURES = [
-    "admin1", "admin2", "market", "latitude", "longitude",
-    "category", "commodity", "unit", "pricetype", "year", "month",
+    "date", "admin1", "admin2", "market", "latitude", "longitude",
+    "category", "commodity", "unit", "pricetype",
 ]
 LOG_TARGET = False
 # ------------------------------------
 
 
 @st.cache_resource(show_spinner="Loading model...")
+def _load(path: str, mtime: float):
+    """Cached loader: a new modification time forces a reload of the model."""
+    return joblib.load(path)
+
+
 def load_model():
     """Return the trained pipeline, or None if the file does not exist yet."""
     if not MODEL_PATH.exists():
         return None
-    return joblib.load(MODEL_PATH)
-
-
-def add_time_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Create year and month from a 'date' column (reused by the batch page)."""
-    df = df.copy()
-    df["date"] = pd.to_datetime(df["date"])
-    df["year"] = df["date"].dt.year
-    df["month"] = df["date"].dt.month
-    return df
+    return _load(str(MODEL_PATH), MODEL_PATH.stat().st_mtime)
 
 
 def predict(model, X: pd.DataFrame) -> np.ndarray:

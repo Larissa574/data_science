@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from utils.data import load_data
-from utils.model import add_time_features, load_model, predict
+from utils.model import load_model, predict
 
 st.title("Batch prediction from a CSV")
 
@@ -13,7 +13,7 @@ df = load_data()
 model = load_model()
 
 if model is None:
-    st.error("Model not found. Place the trained model in artifacts/model.joblib.")
+    st.error("Model not found. Place the trained model in models/model_current.joblib.")
     st.stop()
 
 # ---------- Reference tables built from the data ----------
@@ -36,6 +36,17 @@ st.download_button(
     file_name="template_predictions.csv",
     mime="text/csv",
 )
+
+with st.expander("Valid product and market names"):
+    names_left, names_right = st.columns(2)
+    names_left.dataframe(
+        pd.DataFrame({"product": sorted(commodities_ref["commodity"])}),
+        hide_index=True,
+    )
+    names_right.dataframe(
+        pd.DataFrame({"market": sorted(markets_ref["market"])}),
+        hide_index=True,
+    )
 
 file = st.file_uploader("Your CSV file", type="csv")
 if file is None:
@@ -79,7 +90,6 @@ if valid.empty:
     st.stop()
 
 # ---------- Predict ----------
-valid = add_time_features(valid)
 valid["predicted_price_xof"] = predict(model, valid).round(0)
 valid["known_combination"] = pd.MultiIndex.from_frame(valid[COMBO]).isin(known_combos)
 
