@@ -6,7 +6,13 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+import sys
+import json
+
 ROOT = Path(__file__).resolve().parents[2]
+for p in (ROOT, ROOT / "src"):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
 # The pickled pipeline references classes from the `src` package
 # (e.g. src.preprocessing.DateFeatures): the repo root must be importable.
 if str(ROOT) not in sys.path:
@@ -15,12 +21,18 @@ if str(ROOT) not in sys.path:
 MODEL_PATH = ROOT / "models" / "model_current.joblib"
 
 FEATURES = [
-    "date", "admin1", "admin2", "market", "latitude", "longitude",
-    "category", "commodity", "unit", "pricetype",
+    "date", "admin1", "admin2", "market", "category",
+    "commodity", "unit", "pricetype", "latitude", "longitude",
 ]
 LOG_TARGET = False
 # ------------------------------------
 
+def load_metadata():
+    """Return the model metadata dict, or None if the file is absent."""
+    path = MODEL_PATH.with_suffix(".json")
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
 
 @st.cache_resource(show_spinner="Loading model...")
 def _load(path: str, mtime: float):
@@ -41,3 +53,10 @@ def predict(model, X: pd.DataFrame) -> np.ndarray:
     if LOG_TARGET:
         pred = np.expm1(pred)
     return np.clip(pred, 0, None)
+
+def load_metadata():
+    """Return the model metadata dict, or None if the file is absent."""
+    path = MODEL_PATH.with_suffix(".json")
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
