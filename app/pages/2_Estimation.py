@@ -81,4 +81,4 @@ if st.button("Estimate price", type="primary"):
         mode="markers", name="Estimate",
         marker=dict(size=14, symbol="star", color="red"),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
