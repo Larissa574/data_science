@@ -41,7 +41,6 @@ DEFAULT_STATE_PATH = ROOT / "logs" / "retraining_state.json"
 DEFAULT_DRIFT_REFERENCE_PATH = ROOT / "logs" / "data_drift_reference.json"
 
 REQUIRED_COLUMNS = {"date", "commodity", "unit", "price"}
-DRIFT_NUMERIC_COLUMNS = {"date", "latitude", "longitude"}
 MAX_CATEGORIES = 50
 PSI_STABLE = 0.10
 PSI_SIGNIFICANT = 0.20
@@ -200,7 +199,7 @@ def build_drift_reference(data: pd.DataFrame) -> dict[str, Any]:
         expected["__OTHER__"] = float(max(0.0, 1.0 - sum(expected.values())))
         features[column] = {"kind": "categorical", "expected": expected}
 
-    for column in ["date", *NUMERIC_FEATURES]:
+    for column in ["date", *NUMERIC_FEATURES, "price"]:
         if column not in data.columns:
             continue
         values = _numeric_values(data[column], column)
