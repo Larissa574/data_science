@@ -396,6 +396,24 @@ def promote_model(model: Any, model_path: Path) -> Path | None:
     return archive_path
 
 
+def update_model_metadata(model_path: Path, metrics: dict[str, float | None], n_train: int) -> None:
+    """Keep the sidecar JSON synchronized when a candidate becomes active."""
+    metadata_path = model_path.with_suffix(".json")
+    metadata = _read_json(metadata_path) or {}
+    metadata["version"] = int(metadata.get("version", 0)) + 1
+    metadata["trained_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    metadata["n_train_rows"] = int(n_train)
+    metadata["metrics_validation"] = {
+        "MAE": metrics["mae"],
+        "RMSE": metrics["rmse"],
+        "R2": metrics["r2"],
+    }
+    # The final test set is deliberately not re-used during retraining.
+    metadata["metrics_test"] = None
+    metadata["last_retraining"] = "automatic"
+    _write_json_atomic(metadata_path, metadata)
+
+
 def append_history(log_path: Path, record: dict[str, Any]) -> None:
     """Append one completed attempt to the local CSV history."""
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -484,8 +502,10 @@ def run_retraining(args: argparse.Namespace) -> int:
         })
 
         model_path = _resolve_path(args.model_path)
+        promoted = False
         if not model_path.exists():
             archive = promote_model(candidate_model, model_path)
+            promoted = True
             record.update({
                 "decision": "accepted_initial_model",
                 "reason": "Aucun modèle actif compatible : premier modèle enregistré.",
@@ -503,6 +523,7 @@ def run_retraining(args: argparse.Namespace) -> int:
 
             if candidate_is_better(candidate_metrics, incumbent_metrics):
                 archive = promote_model(candidate_model, model_path)
+                promoted = True
                 record.update({
                     "decision": "accepted",
                     "reason": "MAE et RMSE ne se dégradent pas et au moins une métrique s'améliore.",
@@ -514,6 +535,9 @@ def run_retraining(args: argparse.Namespace) -> int:
                     "decision": "rejected",
                     "reason": "Le candidat n'améliore pas simultanément MAE et RMSE. Modèle actif conservé.",
                 })
+
+        if promoted:
+            update_model_metadata(model_path, candidate_metrics, len(data))
 
         # Save the fixed baseline only after a successful training/evaluation cycle.
         if not reference_path.exists():
