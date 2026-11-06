@@ -2,7 +2,11 @@
 
 import pandas as pd
 
-from src.retrain import candidate_is_better, load_and_validate_data
+from src.retrain import (
+    candidate_is_better,
+    dataframe_fingerprint,
+    load_and_validate_data,
+)
 
 
 def test_validation_removes_invalid_rows_and_duplicates(tmp_path):
@@ -25,6 +29,30 @@ def test_validation_removes_invalid_rows_and_duplicates(tmp_path):
     assert quality["invalid_rows_removed"] == 2
     assert quality["duplicates_removed"] == 1
     assert cleaned.iloc[0]["price"] == 300
+
+
+def test_fingerprint_is_independent_of_row_order():
+    frame = pd.DataFrame({
+        "date": pd.to_datetime(["2025-01-01", "2025-01-02"]),
+        "commodity": ["Maïs", "Riz"],
+        "unit": ["kg", "kg"],
+        "price": [300, 450],
+    })
+
+    assert dataframe_fingerprint(frame) == dataframe_fingerprint(frame.iloc[::-1])
+
+
+def test_fingerprint_changes_when_observation_changes():
+    original = pd.DataFrame({
+        "date": pd.to_datetime(["2025-01-01"]),
+        "commodity": ["Maïs"],
+        "unit": ["kg"],
+        "price": [300],
+    })
+    changed = original.copy()
+    changed.loc[0, "price"] = 325
+
+    assert dataframe_fingerprint(original) != dataframe_fingerprint(changed)
 
 
 def test_candidate_is_accepted_only_if_both_errors_do_not_increase():
