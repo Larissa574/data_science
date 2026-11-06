@@ -1,0 +1,21 @@
+[theme]
+base = "light"
+font = "'Plus Jakarta Sans':https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+
+primaryColor = "#2F7D4F"
+backgroundColor = "#FBFAF5"
+secondaryBackgroundColor = "#F1EFE4"
+textColor = "#1F2D24"
+borderColor = "#DAD6C5"
+
+baseRadius = "large"
+buttonRadius = "large"
+showWidgetBorder = true
+headingFontWeights = [800, 700, 700, 600, 600, 600]
+
+# Colors used by the charts (first color is used for single-line charts)
+chartCategoricalColors = ["#2F7D4F", "#E08A1E", "#C0492B", "#3B82A0", "#8A9A3B", "#7A5C8E", "#5F6B61"]
+
+[theme.sidebar]
+backgroundColor = "#E8F0E3"
+secondaryBackgroundColor = "#F7FAF4"

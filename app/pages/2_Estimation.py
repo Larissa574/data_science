@@ -16,7 +16,7 @@ model = load_model()
 if model is None:
     st.error("Model not found. Place the trained model in models/model_current.joblib.")
     st.stop()
-    
+
 meta = load_metadata()
 if meta:
     if set(meta.get("input_columns", FEATURES)) != set(FEATURES):
@@ -33,22 +33,51 @@ if meta:
             c2.metric("RMSE", f"{m['RMSE']:,.0f} XOF")
             c3.metric("R²", f"{m['R2']:.3f}")
 
-# ---------- Inputs (each choice narrows the next one) ----------
-left, right = st.columns(2)
 
-with left:
-    commodity = st.selectbox("Product", opts["commodities"])
+# ---------- Inputs written as a sentence (each choice narrows the next one) ----------
+def say(col, text):
+    """Write a piece of the sentence in larger text, next to the dropdowns."""
+    col.markdown(f"<span style='font-size:1.2rem'>{text}</span>", unsafe_allow_html=True)
+
+
+with st.container(border=True):
+    st.caption("Describe the price you want to estimate")
+
+    row1 = st.columns([2.2, 3, 0.8, 1.6, 4], vertical_alignment="center")
+    say(row1[0], "I want the price of")
+    with row1[1]:
+        commodity = st.selectbox(
+            "Product", opts["commodities"], label_visibility="collapsed"
+        )
     sub = df[df["commodity"] == commodity]
-    unit = st.selectbox("Unit", sorted(sub["unit"].unique()))
+    say(row1[2], "per")
+    with row1[3]:
+        unit = st.selectbox(
+            "Unit", sorted(sub["unit"].unique()), label_visibility="collapsed"
+        )
     sub = sub[sub["unit"] == unit]
-    pricetype = st.selectbox("Price type", sorted(sub["pricetype"].unique()))
-    sub = sub[sub["pricetype"] == pricetype]
 
-with right:
-    market = st.selectbox("Market", sorted(sub["market"].unique()))
-    target_date = st.date_input(
-        "Date", value=opts["max_date"], min_value=opts["min_date"]
-    )
+    row2 = st.columns([0.6, 1.6, 2.6, 3, 0.8, 2.2], vertical_alignment="center")
+    say(row2[0], "at")
+    with row2[1]:
+        pricetype = st.selectbox(
+            "Price type", sorted(sub["pricetype"].unique()), label_visibility="collapsed"
+        )
+    sub = sub[sub["pricetype"] == pricetype]
+    say(row2[2], "price, in the market of")
+    with row2[3]:
+        market = st.selectbox(
+            "Market", sorted(sub["market"].unique()), label_visibility="collapsed"
+        )
+    say(row2[4], "on")
+    with row2[5]:
+        target_date = st.date_input(
+            "Date",
+            value=opts["max_date"],
+            min_value=opts["min_date"],
+            label_visibility="collapsed",
+        )
+
 history = sub[sub["market"] == market].sort_values("date")
 info = history.iloc[-1]  # location and category come from the data
 
@@ -75,15 +104,21 @@ if st.button("Estimate price", type="primary"):
     estimate = float(predict(model, row)[0])
 
     last = history.iloc[-1]
-    m1, m2, m3 = st.columns(3)
-    m1.metric("Estimated price", f"{estimate:,.0f} XOF per {unit}")
-    m2.metric(
-        "Last observed price",
-        f"{last['price']:,.0f} XOF",
-        delta=f"{estimate - last['price']:+,.0f} XOF vs last observed",
-        delta_color="off",
-    )
-    m3.metric("Historical average", f"{history['price'].mean():,.0f} XOF")
+    with st.container(border=True):
+        m1, m2, m3 = st.columns([1.5, 1, 1], vertical_alignment="center")
+        m1.markdown("**Estimated price**")
+        m1.markdown(
+            f"<span style='font-size:2.8rem;font-weight:700'>{estimate:,.0f} XOF</span>"
+            f"<span style='font-size:1.1rem'> per {unit}</span>",
+            unsafe_allow_html=True,
+        )
+        m2.metric(
+            "Last observed price",
+            f"{last['price']:,.0f} XOF",
+            delta=f"{estimate - last['price']:+,.0f} XOF vs last observed",
+            delta_color="off",
+        )
+        m3.metric("Historical average", f"{history['price'].mean():,.0f} XOF")
 
     # Context chart: history for this exact product, market, unit and price type
     fig = px.line(
@@ -93,7 +128,13 @@ if st.button("Estimate price", type="primary"):
     )
     fig.add_scatter(
         x=[pd.Timestamp(target_date)], y=[estimate],
-        mode="markers", name="Estimate",
+        mode="markers+text", name="Estimate",
+        text=[f"{estimate:,.0f} XOF"], textposition="top center",
         marker=dict(size=14, symbol="star", color="red"),
+    )
+    fig.update_layout(
+        template="plotly_white",
+        margin=dict(l=0, r=0, t=50, b=0),
+        legend=dict(orientation="h", y=1.12, x=0),
     )
     st.plotly_chart(fig, width="stretch")
