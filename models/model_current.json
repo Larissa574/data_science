@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "trained_at": "2026-11-05T08:12:05",
+  "version": 2,
+  "trained_at": "2026-11-06T08:56:45",
   "model_name": "lightgbm",
   "model_label": "LightGBM (gradient boosting)",
   "params": {
@@ -25,21 +25,23 @@
     "latitude",
     "longitude"
   ],
-  "n_train_rows": 73223,
+  "n_train_rows": 114412,
   "metrics_validation": {
-    "MAE": 76.10744061487922,
-    "RMSE": 200.3094830713328,
-    "R2": 0.9611153789956659
+    "MAE": 170.90535298034922,
+    "RMSE": 543.0620694910663,
+    "R2": 0.7165861827479238
   },
   "metrics_test": {
-    "MAE": 78.4948494377737,
-    "RMSE": 217.87793274153034,
-    "R2": 0.9599625525935899
+    "MAE": 144.5449559293244,
+    "RMSE": 366.84130400283385,
+    "R2": 0.8626274913959547
   },
   "libraries": {
     "scikit-learn": "1.9.1",
     "lightgbm": "4.7.0",
     "pandas": "3.0.6",
     "joblib": "1.6.0"
-  }
+  },
+  "split_protocol": "temporel : validation = 2025-01 a 2025-06 (entrainement jusqu'a fin 2024), test = apres 2025-06-30 (entrainement jusqu'a juin 2025)",
+  "note": "Modele final reentraine sur toutes les donnees : ses performances exactes ne sont pas mesurables, les metriques ci-dessus sont celles du protocole temporel."
 }
